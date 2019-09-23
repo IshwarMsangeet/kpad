@@ -1,0 +1,21 @@
+<div class="event-section">
+  <div class="title">
+    <img src="images/line.png">
+    <span class="title_line">Incident</span>
+  </div>
+  <ul *ngIf="!fetchingData" class="event-ul">
+    <li *ngFor="let incident of incidents">
+      <span *ngIf="incident.status == 'red'" class="badge text-marron text-wrap">{{incident.message}}</span>
+      <span *ngIf="incident.status == 'amber'" class="badge text-warning text-wrap">{{incident.message}}</span>
+      <span *ngIf="incident.status == 'green'" class="badge text-green text-wrap">{{incident.message}}</span>
+    </li>
+    <li class="text-center" *ngIf="this.incidents.length == 0">
+      <span class="text-danger">No Incident found</span>
+    </li>
+  </ul>
+  <div *ngIf="fetchingData" class="row justify-content-center event-ul">
+    <div class="col align-self-center">
+      <app-spinner></app-spinner>
+    </div>
+  </div>
+</div>

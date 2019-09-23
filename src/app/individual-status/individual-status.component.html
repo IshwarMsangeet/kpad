@@ -1,0 +1,61 @@
+<div class="row">
+  <div class="col">
+    <div class="second-widget">
+      <div class="title">
+        <img src="images/line.png">
+        <span class="title_line">Site Overview</span>
+      </div>
+      <div *ngIf="!fetchingData" class="scroll" >
+        <div *ngFor="let status of siteStatuses">
+          <div class="card m-2" [ngClass]="{'bg-light-green': status.status == 'green', 'bg-pink-red': status.status == 'red'
+               ,'bg-orange': status.status == 'amber'}">
+            <div class="card-header card-status-title">
+              <span>{{status.title}}</span>
+              <div class="btn-group float-right">
+                <button type="button" class="btn btn-sm dropdown-toggle text-white" data-toggle="dropdown" aria-haspopup="true"
+                aria-expanded="false" [ngClass]="{'bg-light-green': status.status == 'green', 'bg-pink-red': status.status == 'red'
+                   ,'bg-orange': status.status == 'amber'}">Overall</button>
+                <div class="dropdown-menu">
+                  <a class="dropdown-item">Overall</a>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item">Bengaluru</a>
+                  <a class="dropdown-item">Mumbai</a>
+                </div>
+              </div>
+            </div>
+            <div class="card-body p-3" (click) = "gotoDetailPage(status.target, status.target_type)">
+              <div class="row">
+                <div class="col-md-10">
+                  <div class="row justify-content-center no-gutters">
+                    <div class="col-md-4 mob-bt-bottom align-self-center text-center">
+                      <div class="matrix-heading-style">Availability:</div>
+                      <div class="matrix-value-style">{{status.metrics.availability_last24hrs}}</div>
+                    </div>
+                    <div class="col-md-4 mob-bt-bottom align-self-center text-center">
+                      <div class="matrix-heading-style">Average responsetime:</div>
+                      <div class="matrix-value-style">{{status.metrics.avg_responsetime_last24hrs}}</div>
+                    </div>
+                    <div class="col-md-4 mob-bt-bottom align-self-center text-center">
+                      <div class="matrix-heading-style">Errors:</div>
+                      <div class="matrix-value-style">{{status.metrics.errors_last24hrs}}</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-2 align-self-center">
+                  <fa-icon *ngIf="status.status == 'green'" [icon]="up" [styles]="{'stroke': 'green', 'color': 'white'}" size="2x" class="card-img-top" pull="right"></fa-icon>
+                  <fa-icon *ngIf="status.status == 'amber'" [icon]="question" [styles]="{'stroke': 'amber', 'color': 'white'}" size="2x" class="card-img-top" pull="right"></fa-icon>
+                  <fa-icon *ngIf="status.status == 'red'" [icon]="down" [styles]="{'stroke': 'red', 'color': 'white'}" size="2x" class="card-img-top" pull="right"></fa-icon>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="fetchingData" class="row justify-content-center scroll">
+        <div class="col align-self-center">
+          <app-spinner></app-spinner>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

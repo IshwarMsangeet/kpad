@@ -1,0 +1,31 @@
+<div *ngIf="!fetchingData" class="status-section">
+  <div class="title">
+    <img src="images/line.png">
+    <span class="title_line">Overall Status</span>
+  </div>
+  <div class="row mb-2 pt-2">
+    <div class="col-md-4 col-sm-4 col-xs-4 black">
+      <img src="images/black.png" alt="Snow" style="width:100%;">
+      <div class="centered-arrow"><img src="images/pause.png"></div>
+      <div class="centered"><strong>{{pause}}</strong></div>
+      <div class="centered-text"><span>PAUSE</span></div>
+    </div>
+    <div class="col-md-4 col-sm-4 col-xs-4 red">
+      <img src="images/pink_tomato.png" alt="Snow" style="width:100%;">
+      <div class="centered-arrow"><img src="images/down_arrow.png"></div>
+      <div class="centered"><strong>{{down}}</strong></div>
+      <div class="centered-text"><span>DOWN</span></div>
+    </div>
+    <div class="col-md-4 col-sm-4 col-xs-4 green">
+      <img src="images/green.png" alt="Snow" style="width:100%;">
+      <div class="centered-arrow"><img src="images/up_arrow.png"></div>
+      <div class="centered"><strong>{{up}}</strong></div>
+      <div class="centered-text"><span>UP</span></div>
+    </div>
+  </div>
+</div>
+<div *ngIf="fetchingData" class="row justify-content-center scroll">
+  <div class="col align-self-center">
+    <app-spinner></app-spinner>
+  </div>
+</div>

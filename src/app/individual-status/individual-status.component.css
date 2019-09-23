@@ -1,0 +1,134 @@
+.card-status-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-shadow: 1px 1px #f1fbe3;
+  border-bottom: 1px solid #a6a6a6;
+}
+
+.card-body {
+  cursor:pointer;
+}
+
+.matrix-heading-style {
+  font-size: .8rem;
+  font-weight: 600;
+}
+
+.matrix-value-style {
+  font-weight: bold;
+  color: #fff;
+  font-size: 1.2rem;
+}
+.bg-light-green {
+  background-color: #92BB45;
+}
+
+.bg-orange {
+  background-color: #fd7e14;
+}
+
+.bg-pink-red {
+  background-color: #FF6347;
+}
+
+.second-widget {
+  background: #fff2cd;
+    padding: 15px 15px;
+    /* height: 98vh; */
+    /* padding-top: 10px; */
+    box-shadow: 0 0 0.8rem rgba(0, 0, 0, .25);
+}
+
+.second-widget .title {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 35px;
+    position: relative;
+}
+
+.second-widget .title img {
+    width: 100%;
+}
+
+.second-widget .title_line {
+    background: #fff2cd;
+    padding: 5px 10px;
+    text-transform: uppercase;
+    font-size: 18px;
+    /* padding-top: -47px; */
+    position: absolute;
+    left: 42%;
+    top: -15px;
+}
+
+.scroll {
+  overflow-y: scroll;
+  height: 78vh;
+}
+
+@media only screen and (max-width: 1024px) {
+	.second-widget .title_line {
+	    left: 36%;
+	}
+}
+
+@media only screen and (max-width: 991px) {
+  .mob-bt-bottom{
+    border-bottom:1px solid #a6a6a6;
+    margin-bottom: 10px;
+  }
+}
+
+@media only screen and (max-width: 767px) {
+	.second-widget.title_line {
+	    left: 36%;
+	}
+  .second-widget {
+      padding: 15px 5px;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+	.second-widget .title_line {
+	    left: 36%;
+	}
+  .second-widget {
+      padding: 15px 5px;
+  }
+}
+
+@media only screen and (max-width: 500px) {
+	.second-widget .title_line {
+	    left: 35.5%;
+	}
+  .second-widget {
+      padding: 15px 5px;
+  }
+}
+
+@media only screen and (max-width: 480px) {
+	.second-widget .title_line {
+	    left: 28%;
+	}
+  .second-widget {
+      padding: 15px 5px;
+  }
+}
+
+@media only screen and (max-width: 400px) {
+	.second-widget .title_line {
+	    left: 27%;
+	}
+  .second-widget {
+      padding: 15px 5px;
+  }
+}
+
+@media only screen and (max-width: 360px) {
+	.second-widget .title_line {
+	    left: 22%;
+	}
+  .second-widget {
+      padding: 15px 5px;
+  }
+}

@@ -1,0 +1,18 @@
+p {
+  font-family: Lato;
+}
+
+body {
+  /* background-color: #CBD4E3; */
+}
+
+.navbar-brand {
+  cursor: pointer;
+}
+
+@media only screen and (max-width: 767px) {
+  .navbar-brand {
+    cursor: pointer;
+    font-size: 0.9rem;
+  }
+}

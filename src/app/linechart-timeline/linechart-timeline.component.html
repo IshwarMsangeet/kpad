@@ -1,0 +1,18 @@
+<h6 class="card-title text-center">{{graphTitle}}</h6>
+<div style="width: 100%; height: 300px">
+  <ngx-charts-line-chart
+      [scheme]="colorScheme"
+      [results]="multi"
+      [gradient]="gradient"
+      [xAxis]="showXAxis"
+      [yAxis]="showYAxis"
+      [showXAxisLabel]="showXAxisLabel"
+      [showYAxisLabel]="showYAxisLabel"
+      [xAxisLabel]="xAxisLabel"
+      [yAxisLabel]="yAxisLabel"
+      [showRefLines]="showRefLines"
+      [showRefLabels]="showRefLabels"
+      [referenceLines]="referenceLines"
+      (select)="onSelect($event)">
+  </ngx-charts-line-chart>
+</div>
