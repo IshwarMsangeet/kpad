@@ -2,7 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { StatusRetrieverService } from '../common-services/status-retriever.service';
 import { Router } from '@angular/router';
 
-import { faArrowCircleUp, faArrowCircleDown, faQuestionCircle } from '@fortawesome/free-solid-svg-icons';
+import { faArrowCircleUp, faArrowCircleDown, faQuestionCircle , faCheckCircle,
+  faGlobe, faLocationArrow, faExclamationTriangle, faClock, faUserFriends, faLaptop } 
+    from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-individual-status',
@@ -15,7 +17,16 @@ export class IndividualStatusComponent implements OnInit {
   up = faArrowCircleUp;
   down = faArrowCircleDown;
   question = faQuestionCircle;
-  selectedArea: string = 'Overall';
+  glob = faGlobe;
+  location = faLocationArrow;
+  errorIcon = faExclamationTriangle;
+  clockIcon = faClock;
+  userIcon = faUserFriends;
+  checkICon = faCheckCircle;
+  laptopIcon = faLaptop;
+
+  selectedAgent: string = 'Overall';
+  
   fetchingData: boolean = false;
 
   constructor(private service: StatusRetrieverService, private router: Router) { }

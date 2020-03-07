@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { OverallStatusService, SitesStatus, StatusObject } from './overall-status.service';
-
+import { faClock } from '@fortawesome/free-solid-svg-icons';
 @Component({
   selector: 'app-overall-status',
   templateUrl: './overall-status.component.html',
@@ -14,6 +14,7 @@ export class OverallStatusComponent implements OnInit {
   down: number;
   pause: number;
   fetchingData: boolean = false;
+  clockIcon = faClock;
 
   constructor(private service: OverallStatusService) {
 

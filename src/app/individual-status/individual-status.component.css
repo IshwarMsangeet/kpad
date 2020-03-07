@@ -31,14 +31,6 @@
   background-color: #FF6347;
 }
 
-.second-widget {
-  background: #fff2cd;
-    padding: 15px 15px;
-    /* height: 98vh; */
-    /* padding-top: 10px; */
-    box-shadow: 0 0 0.8rem rgba(0, 0, 0, .25);
-}
-
 .second-widget .title {
     width: 100%;
     text-align: center;
@@ -61,9 +53,19 @@
     top: -15px;
 }
 
-.scroll {
-  overflow-y: scroll;
-  height: 78vh;
+.custom-table-border {
+  box-shadow: 2px 4px 14px 2px #ccc5c5b5;
+  width: 100%;
+  max-height: 50vh;
+  overflow-y: auto;
+}
+
+.custom-table-border thead tr th {
+  position: sticky;
+  top: 0;
+  background: #fff;
+  z-index: 100;
+  font-size: .9rem;
 }
 
 @media only screen and (max-width: 1024px) {

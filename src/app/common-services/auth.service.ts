@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
-
+import { environment } from '../../environments/environment';
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-authCredential: string = 'ish@gmail.com_spog123';
+authCredential: string = environment.USRNAME_PWD;
   constructor(private router: Router) { }
 
   canActivate(): boolean {

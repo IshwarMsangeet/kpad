@@ -1,31 +1,37 @@
-<div *ngIf="!fetchingData" class="status-section">
-  <div class="title">
-    <img src="images/line.png" alt="No Image">
-    <span class="title_line">Overall Status</span>
-  </div>
-  <div class="row mb-2 pt-2">
-    <div class="col-md-4 col-sm-4 col-xs-4 black">
-      <img src="images/black.png" alt="Snow" style="width:100%;">
-      <div class="centered-arrow"><img src="images/pause.png" alt="No Image"></div>
-      <div class="centered"><strong>{{pause}}</strong></div>
-      <div class="centered-text"><span>PAUSE</span></div>
-    </div>
-    <div class="col-md-4 col-sm-4 col-xs-4 red">
-      <img src="images/pink_tomato.png" alt="Snow" style="width:100%;">
-      <div class="centered-arrow"><img src="images/down_arrow.png" alt="No Image"></div>
-      <div class="centered"><strong>{{down}}</strong></div>
-      <div class="centered-text"><span>DOWN</span></div>
-    </div>
-    <div class="col-md-4 col-sm-4 col-xs-4 green">
-      <img src="images/green.png" alt="Snow" style="width:100%;">
-      <div class="centered-arrow"><img src="images/up_arrow.png" alt="No Image"></div>
-      <div class="centered"><strong>{{up}}</strong></div>
-      <div class="centered-text"><span>UP</span></div>
+<div *ngIf="fetchingData" class="status-section">
+  <div class="mb-2"><fa-icon [icon]="clockIcon" pull="left"></fa-icon>Overall Status</div>
+  <div class="row justify-content-center">
+    <div class="col align-self-center">
+      <app-spinner></app-spinner>
     </div>
   </div>
 </div>
-<div *ngIf="fetchingData" class="row justify-content-center scroll">
-  <div class="col align-self-center">
-    <app-spinner></app-spinner>
+
+<div *ngIf="!fetchingData">
+  <div class="row mb-2 mx-0"><fa-icon [icon]="clockIcon" pull="left"></fa-icon>Overall Status</div>
+  <div class="row mb-md-5">
+    <div class="card m-3 bg-success overall-card-status">
+      <div class="card-body p-2">
+        <div class="d-flex justify-content-end">
+          <span class="text-white">UP</span><img class="status-Arrow" src="images/up_arrow.png" alt="No Image">
+        </div>
+        <div class="ml-2 overall-value-status">{{up}}</div>
+      </div>
+    </div>
+    <div class="card m-3 bg-danger overall-card-status">
+      <div class="card-body p-2">
+        <div class="d-flex justify-content-end">
+          <span class="text-white">DOWN</span><img class="status-Arrow" src="images/down_arrow.png" alt="No Image">
+        </div>
+        <div class="row ml-2 overall-value-status">{{down}}</div>
+      </div>
+    </div>
+    <div class="card m-3 bg-info overall-card-status">
+      <div class="card-body p-2">
+        <div class="d-flex justify-content-end">
+          <span class="text-white">PAUSE</span><img class="status-Arrow" src="images/pause.png" alt="No Image"></div>
+        <div class="row ml-2 overall-value-status">{{pause}}</div>
+      </div>
+    </div>
   </div>
 </div>
