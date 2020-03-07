@@ -31,6 +31,10 @@
   background-color: #FF6347;
 }
 
+.second-widget{
+  min-height: 5rem;
+}
+
 .second-widget .title {
     width: 100%;
     text-align: center;

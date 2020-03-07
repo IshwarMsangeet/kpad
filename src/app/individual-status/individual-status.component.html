@@ -62,8 +62,8 @@
 
 
 
-<div class="row second-widget">
-  <div *ngIf="!fetchingData" class="custom-table-border table-responsive-sm mx-3">
+<div class="row justify-content-center second-widget">
+  <div *ngIf="fetchingData" class="custom-table-border table-responsive-sm mx-3">
     <table class="table" aria-describedby="Site Overview">
       <thead>
         <tr>
@@ -100,7 +100,7 @@
       </tbody>
     </table>
   </div>
-  <div *ngIf="fetchingData" class="row justify-content-center" style="height: 15rem;">
+  <div *ngIf="!fetchingData">
     <div class="col align-self-center">
       <app-spinner></app-spinner>
     </div>

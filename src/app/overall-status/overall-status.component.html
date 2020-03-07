@@ -1,5 +1,5 @@
 <div *ngIf="fetchingData" class="status-section">
-  <div class="mb-2"><fa-icon [icon]="clockIcon" pull="left"></fa-icon>Overall Status</div>
+  <div class="mb-2 align-items-center"><fa-icon [icon]="clockIcon" pull="left"></fa-icon>Overall Status</div>
   <div class="row justify-content-center">
     <div class="col align-self-center">
       <app-spinner></app-spinner>
@@ -8,7 +8,7 @@
 </div>
 
 <div *ngIf="!fetchingData">
-  <div class="row mb-2 mx-0"><fa-icon [icon]="clockIcon" pull="left"></fa-icon>Overall Status</div>
+  <div class="row mb-2 mx-0 align-items-center"><fa-icon [icon]="clockIcon" pull="left"></fa-icon>Overall Status</div>
   <div class="row mb-md-5">
     <div class="card m-3 bg-success overall-card-status">
       <div class="card-body p-2">
