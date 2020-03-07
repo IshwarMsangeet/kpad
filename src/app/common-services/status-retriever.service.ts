@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { environment }  from '../../environments/environment';
 
 @Injectable()
 export class StatusRetrieverService {
 
   public statusInfo: any;
 
-  statusInfoUrl = "http://35.244.59.144/spgdash/api/target/result";
-  statusDetailsUrl = "http://35.244.59.144/spgdash/api/target/resultdetails?target=";
+  statusInfoUrl = `${environment.BASE_URL}/spgdash/api/target/result`;
+  statusDetailsUrl = `${environment.BASE_URL}/spgdash/api/target/resultdetails?target=`;
 
   constructor(private http: HttpClient) {
 

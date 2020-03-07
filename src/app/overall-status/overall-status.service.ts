@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-
+import { environment }  from '../../environments/environment';
 export interface SitesStatus {
   up: number;
   down: number;
@@ -15,7 +15,7 @@ export interface StatusObject {
 @Injectable()
 export class OverallStatusService {
 
-  overallSiteStatusUrl = "http://35.244.59.144/spgdash/api/basic";
+  overallSiteStatusUrl = `${environment.BASE_URL}/spgdash/api/basic`;
 
   constructor(private http: HttpClient) { }
 

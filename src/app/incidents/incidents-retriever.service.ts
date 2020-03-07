@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { environment }  from '../../environments/environment';
 
 // export interface Incidents {
 //   status: string;
@@ -15,7 +16,7 @@ import { HttpClient } from '@angular/common/http';
 export class IncidentsRetrieverService {
 
   incidents: any;
-  eventsStatusUrl = "http://35.244.59.144/spgdash/api/events";
+  eventsStatusUrl = `${environment.BASE_URL}/spgdash/api/events`;
 
 
   constructor(private http: HttpClient) { }

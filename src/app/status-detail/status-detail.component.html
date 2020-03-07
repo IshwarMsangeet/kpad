@@ -2,7 +2,7 @@
   <div class="col m-2">
     <div class="current-status-section mb-2">
       <div class="title">
-        <img src="images/line.png">
+        <img src="images/line.png" alt="No Image">
         <span class="title_line">Current Status</span>
       </div>
       <div class="row justify-content-md-end mb-1 no-gutters">
@@ -15,7 +15,6 @@
       </div>
 
       <div id="div1" class="kbits-section">
-        <!-- <span>KBITS</span> -->
         <span>{{title}}</span>
         <span>
           <span class="glyphicon" [ngClass]="{'bg-light-green': statusDetails.status == 'green',
@@ -27,7 +26,7 @@
         <p style="margin-bottom:0">Since 64 hrs 16 mins (06-05-2019 09:21:59)</p>
 
         <div class="title" style="margin-bottom:10px;">
-          <img src="images/line.png">
+          <img src="images/line.png" alt="No Image">
         </div>
         <div class="row justify-content-center p-1">Availability</div>
         <div class="row" style="margin:0;border-bottom: 1px solid #bbb;">
