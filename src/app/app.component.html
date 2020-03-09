@@ -1,4 +1,18 @@
-<nav class="navbar navbar-dark bg-dark">
+<nav class="navbar nabar-fixed navbar-expand-lg navbar-custom">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#kpadSideBtn" 
+    aria-controls="kpadSideBtn" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
   <span routerLink='' class="navbar-brand mb-0 h1">Karnataka Portals Availability Dashboard</span>
+  <div class="collapse navbar-collapse" id="kpadSideBtn">
+    <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+    </ul>
+    <form class="form-inline my-2 my-lg-0 input-group-sm">
+      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+    </form>
+    <fa-icon class="mx-2" [icon]="faCog" pull="left"></fa-icon>
+    <fa-icon class="mx-2" [icon]="faBell" pull="left"></fa-icon>
+    <fa-icon class="mx-2" [icon]="faUser" pull="left"></fa-icon>
+   </div>
 </nav>
 <router-outlet></router-outlet>

@@ -63,7 +63,7 @@
 
 
 <div class="row justify-content-center second-widget">
-  <div *ngIf="!fetchingData" class="custom-table-border table-responsive-sm mx-3">
+  <div *ngIf="!fetchingData" class="custom-table-border table-responsive mx-3">
     <table class="table" aria-describedby="Site Overview">
       <thead>
         <tr>
@@ -75,7 +75,7 @@
           <th scope="col"><fa-icon [icon]="userIcon" pull="left"></fa-icon>User Access Matrics</th>
           <th scope="col"><fa-icon [icon]="location" pull="left"></fa-icon>Location</th>
         </tr>
-      </thead>
+       </thead>
       <tbody>
           <tr *ngFor="let status of siteStatuses" (click) = "gotoDetailPage(status.target, status.target_type , $event)">
             <th scope="row" data-toggle="tooltip" data-placement="right" title="{{status.target}}">
@@ -89,11 +89,26 @@
             <td class="text-center">{{status.metrics.total_hits}}/{{status.metrics.error_count}}</td>
             <td class="text-center">NA</td>
             <td class="text-center">
-              <select class="custom-select custom-select-sm" [(ngModel)]= "status.selectedAgent"  
+              <select *ngIf="status.agent_list && status.agent_list.length > 1; else elseBlock" 
+                class="custom-select custom-select-sm" [(ngModel)]= "status.selectedAgent"  
                 data-style="btn-new" (ngModelChange) = "selectTheAgent(status)" id="{{status.title}}">
-                <option [value]="selectAgent">Overall</option>
+                <option [value]="selectAgent" >Overall</option>
                 <option *ngFor="let agent of status.agent_list" [value]="agent">{{agent}}</option>
               </select>
+              <ng-template #elseBlock>
+                <select disabled class="custom-select custom-select-sm" [(ngModel)]= "status.agent_list[0]"  
+                  data-style="btn-new"  id="{{status.title}}">
+                  <option *ngFor="let agent of status.agent_list" [value]="agent">{{agent}}</option>
+                </select>
+              </ng-template>
+
+              <select *ngIf="status.agent_list && status.agent_list.length > 1" 
+                class="custom-select custom-select-sm" [(ngModel)]= "status.selectedAgent"  
+                data-style="btn-new" (ngModelChange) = "selectTheAgent(status)" id="{{status.title}}">
+                <option [value]="selectAgent" >Overall</option>
+                <option *ngFor="let agent of status.agent_list" [value]="agent">{{agent}}</option>
+              </select>
+
             </td>
           </tr>
       </tbody>

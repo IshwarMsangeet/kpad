@@ -26,8 +26,10 @@ export class IndividualStatusComponent implements OnInit {
   laptopIcon = faLaptop;
 
   selectAgent: string = 'Overall';
-  status: any = {};
-  // status.selectedAgent = "Overall";
+  status: any = {
+    selectedAgent : "Overall"
+  };
+  
   backupStatusDetails;
   fetchingData: boolean = false;
   isSelectFunClicked: boolean = false;
@@ -56,7 +58,6 @@ export class IndividualStatusComponent implements OnInit {
   selectTheAgent(status: any) {
     this.isSelectFunClicked = true;
       this.service.getStatusDetailV2(status).subscribe(res => {
-        status.title = "change it again"
         status.metrics = res.data[0].metrics;
         this.fetchingData = false;
         this.isSelectFunClicked = false;
