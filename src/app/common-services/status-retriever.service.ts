@@ -9,6 +9,7 @@ export class StatusRetrieverService {
 
   statusInfoUrl = `${environment.BASE_URL}/spgdash/api/target/result`;
   statusDetailsUrl = `${environment.BASE_URL}/spgdash/api/target/resultdetails?target=`;
+  statusDetailsV2Url = `${environment.BASE_URL}/spgdash/api/target/resultdetailsV2?target=`;
 
   constructor(private http: HttpClient) {
 
@@ -153,6 +154,11 @@ export class StatusRetrieverService {
 
   getStatusDetail(target, targetType){
     let finalUrl = this.statusDetailsUrl + target + '&target_type='+ targetType;
+    return this.http.get<any>(finalUrl);
+  }
+
+  getStatusDetailV2(val: any){
+    let finalUrl = this.statusDetailsV2Url + val.target + '&target_type=url&agent='+ val.selectedAgent;
     return this.http.get<any>(finalUrl);
   }
 }

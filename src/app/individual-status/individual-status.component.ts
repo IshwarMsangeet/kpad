@@ -25,9 +25,12 @@ export class IndividualStatusComponent implements OnInit {
   checkICon = faCheckCircle;
   laptopIcon = faLaptop;
 
-  selectedAgent: string = 'Overall';
-  
+  selectAgent: string = 'Overall';
+  status: any = {};
+  // status.selectedAgent = "Overall";
+  backupStatusDetails;
   fetchingData: boolean = false;
+  isSelectFunClicked: boolean = false;
 
   constructor(private service: StatusRetrieverService, private router: Router) { }
 
@@ -42,7 +45,25 @@ export class IndividualStatusComponent implements OnInit {
   });
   }
 
-  gotoDetailPage(target, target_type) {
+  gotoDetailPage(target, target_type, ev: any) {
+    if(!this.isSelectFunClicked){
     this.router.navigate(['/status-details'], {queryParams: {'target': target, 'target_type': target_type}});
+  }else{
+    this.isSelectFunClicked = false;
+  }
+  }
+
+  selectTheAgent(status: any) {
+    this.isSelectFunClicked = true;
+      this.service.getStatusDetailV2(status).subscribe(res => {
+        status.title = "change it again"
+        status.metrics = res.data[0].metrics;
+        this.fetchingData = false;
+        this.isSelectFunClicked = false;
+      },
+        error => {
+          this.fetchingData = false;
+          this.isSelectFunClicked = false;
+        });
   }
 }
