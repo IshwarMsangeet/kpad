@@ -1,3 +1,5 @@
+@import '../app.component.css';
+
 .status-section {
 	padding: 15px 15px;
   min-height: 10rem;

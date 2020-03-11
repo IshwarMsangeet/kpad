@@ -1,6 +1,8 @@
 import { Component, ViewEncapsulation } from '@angular/core';
-import { faUser, faCog, faBell } 
-    from '@fortawesome/free-solid-svg-icons';
+import { faUser as farUser, faBell as farBell } 
+    from '@fortawesome/free-regular-svg-icons';
+
+import { faCog } from '@fortawesome/free-solid-svg-icons';
 @Component({
   selector: 'my-app',
   templateUrl: './app.component.html',
@@ -9,7 +11,7 @@ import { faUser, faCog, faBell }
 })
 export class AppComponent  {
   name = 'Angular';
-  faUser = faUser;
+  faUser = farUser;
   faCog = faCog;
-  faBell = faBell;
+  faBell = farBell;
 }

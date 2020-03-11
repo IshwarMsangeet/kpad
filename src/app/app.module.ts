@@ -22,6 +22,7 @@ import { SpinnerComponent } from './spinner/spinner.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { LoginComponent } from './login/login.component';
 import { AuthService } from './common-services/auth.service';
+import { LoadingComponent } from './loading/loading.component';
 
 const appRoutes: Routes = [
   { path: '', component: DashboardComponent,  canActivate: [AuthService] },
@@ -32,7 +33,7 @@ const appRoutes: Routes = [
 
 @NgModule({
   imports:      [
-    RouterModule.forRoot(appRoutes, { enableTracing: true }),
+    RouterModule.forRoot(appRoutes),
     BrowserModule,
     HttpClientModule,
     FormsModule,
@@ -41,7 +42,10 @@ const appRoutes: Routes = [
     BrowserAnimationsModule,
     FontAwesomeModule
   ],
-  declarations: [ AppComponent, LinechartTimelineComponent, OverallStatusComponent, IncidentsComponent, IndividualStatusComponent, StatusDetailComponent, SpinnerComponent, DashboardComponent, LoginComponent ],
+  declarations: [ AppComponent, LinechartTimelineComponent, 
+      OverallStatusComponent, IncidentsComponent,
+      IndividualStatusComponent, StatusDetailComponent,
+      SpinnerComponent, DashboardComponent, LoginComponent, LoadingComponent ],
   bootstrap:    [ AppComponent ],
   providers: [IncidentsRetrieverService, StatusRetrieverService, OverallStatusService]
 })

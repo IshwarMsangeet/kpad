@@ -91,8 +91,8 @@
             <td class="text-center">
               <select *ngIf="status.agent_list && status.agent_list.length > 1; else elseBlock" 
                 class="custom-select custom-select-sm" [(ngModel)]= "status.selectedAgent"  
-                data-style="btn-new" (ngModelChange) = "selectTheAgent(status)" id="{{status.title}}">
-                <option [value]="selectAgent" >Overall</option>
+                (ngModelChange) = "selectTheAgent(status)" (click)="onSelect($event)" >
+                <option [value]="undefined" >Overall</option>
                 <option *ngFor="let agent of status.agent_list" [value]="agent">{{agent}}</option>
               </select>
               <ng-template #elseBlock>
@@ -101,14 +101,6 @@
                   <option *ngFor="let agent of status.agent_list" [value]="agent">{{agent}}</option>
                 </select>
               </ng-template>
-
-              <select *ngIf="status.agent_list && status.agent_list.length > 1" 
-                class="custom-select custom-select-sm" [(ngModel)]= "status.selectedAgent"  
-                data-style="btn-new" (ngModelChange) = "selectTheAgent(status)" id="{{status.title}}">
-                <option [value]="selectAgent" >Overall</option>
-                <option *ngFor="let agent of status.agent_list" [value]="agent">{{agent}}</option>
-              </select>
-
             </td>
           </tr>
       </tbody>
@@ -119,4 +111,5 @@
       <app-spinner></app-spinner>
     </div>
   </div>
+  <app-loading *ngIf="isLoading"></app-loading>
 </div>

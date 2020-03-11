@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { OverallStatusService, SitesStatus, StatusObject } from './overall-status.service';
-import { faClock } from '@fortawesome/free-solid-svg-icons';
+import { faClock } from '@fortawesome/free-regular-svg-icons';
 @Component({
   selector: 'app-overall-status',
   templateUrl: './overall-status.component.html',

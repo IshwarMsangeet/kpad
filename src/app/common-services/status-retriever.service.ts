@@ -152,13 +152,19 @@ export class StatusRetrieverService {
     return this.http.get<any>(this.statusInfoUrl);
   }
 
-  getStatusDetail(target, targetType){
+  getStatusDetail(target, targetType) {
     let finalUrl = this.statusDetailsUrl + target + '&target_type='+ targetType;
     return this.http.get<any>(finalUrl);
   }
 
-  getStatusDetailV2(val: any){
-    let finalUrl = this.statusDetailsV2Url + val.target + '&target_type=url&agent='+ val.selectedAgent;
-    return this.http.get<any>(finalUrl);
+  getStatusDetailV2(val: any) {
+    let statusDetailUrl: string;
+    if(val.selectedAgent && val.selectedAgent != "undefined" && val.selectedAgent != "null"){
+      statusDetailUrl = `${this.statusDetailsV2Url}${val.target}&target_type=url&agent=${val.selectedAgent}`;
+    } else {
+      statusDetailUrl = `${this.statusDetailsV2Url}${val.target}&target_type=url`;
+    }
+     
+    return this.http.get<any>(statusDetailUrl);
   }
 }
