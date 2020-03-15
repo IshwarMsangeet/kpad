@@ -1,5 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { faArrowUp, faArrowDown, faDownload, faUpload } from '@fortawesome/free-solid-svg-icons';
+import { faArrowUp, faArrowDown, faDownload, faUpload, faBars } from 
+        '@fortawesome/free-solid-svg-icons';
+import { faWindowClose } from '@fortawesome/free-regular-svg-icons';
+
 import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { StatusRetrieverService } from '../common-services/status-retriever.service';
@@ -15,6 +18,8 @@ export class StatusDetailComponent implements OnInit {
   down = faArrowDown;
   download = faDownload;
   upload = faUpload;
+  barsIcon = faBars;
+  faCloseIcon = faWindowClose;
   target: any;
   targetType: any;
   statusDetails: any = {};
@@ -24,7 +29,7 @@ export class StatusDetailComponent implements OnInit {
   selectedAgent='SPG-ALL-AGENT';
   errorList: any[];
   fetchingData:boolean= false;
-  title:string;
+  title:string ='...';
   siteList: any[];
   @ViewChild(LinechartTimelineComponent)
   private linechart: LinechartTimelineComponent
@@ -40,8 +45,8 @@ export class StatusDetailComponent implements OnInit {
       console.log("params=> ", params.target);
       this.target =  params.target;
       this.targetType = params.target_type;
+      this.title = params.title;
       this.getStatusDetail();
-      this.getHostDetails();
     });
     this.siteList = this.statusRetService.sitesInfo;
   }
@@ -91,14 +96,5 @@ export class StatusDetailComponent implements OnInit {
         this.plotTheChart('availability_last24hrs','errorlist_last24hrs','Availability');
       }, 100)
     }
-  }
-
-  private getHostDetails() {
-    this.statusRetService.getHostDetails(this.target)
-    .subscribe(res=>{
-      console.log("Host details=>", res);
-    },err=>{
-
-    })
   }
 }

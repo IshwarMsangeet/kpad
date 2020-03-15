@@ -69,13 +69,13 @@ export class IndividualStatusComponent implements OnInit {
 
   gotoDetailPage(target: string, target_type: string, index: number) {
     if (!this.isSelectFunClicked) {
-      let siteStatusList: [] = this.siteStatuses.slice();
-      let status = siteStatusList[index];
+      let siteStatusList: any[] = this.siteStatuses.slice();
+      let status: any = siteStatusList[index];
       siteStatusList.splice(index, 1);
       siteStatusList.unshift(status);
       this.service.sitesInfo = siteStatusList;
       this.router.navigate(['/status-details'],
-        { queryParams: { 'target': target, 'target_type': target_type } });
+        { queryParams: { 'target': target, 'target_type': target_type , 'title': status.title} });
     } else {
       this.isSelectFunClicked = false;
     }

@@ -31,7 +31,7 @@
 }
 
 .kbits-section .glyphicon {
-    padding-top: 7px;
+    padding-top: 4px;
     border-radius: 3px;
     display: block;
     margin: 0 auto;
@@ -44,7 +44,7 @@
 }
 
 .current-status-section {
-    padding-top: 10px;
+    padding-top: 2px;
 }
 
 .current-status-section .title {

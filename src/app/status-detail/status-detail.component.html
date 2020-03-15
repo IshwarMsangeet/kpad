@@ -1,23 +1,28 @@
 
 
 <mat-sidenav-container class="example-container" 
-  hasBackdrop="false">
+  hasBackdrop="false" style="height: 100%">
   <mat-sidenav #sidenav mode="side" opened>
     <mat-nav-list role="navigation">
-      <a mat-list-item [routerLink]="['/status-details']" [queryParams]="{ target: site.target, target_type: site.target_type }"  *ngFor=" let site of siteList" routerLinkActive="active-link">{{site.title}}</a>
+      <a mat-list-item [routerLink]="['/status-details']"
+         [queryParams]="{ target: site.target, target_type: site.target_type, title: site.title }"
+         *ngFor=" let site of siteList"
+         routerLinkActive="active-link">{{site.title}}
+      </a>
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>
-    <button mat-button (click)="sidenav.toggle()">toggle</button>
-    <div class="row justify-content-center no-gutters" *ngIf="!fetchingData">
-      <div class="col m-2">
+    <div class="row justify-content-center no-gutters">
+      <div class="col">
         <div class="current-status-section mb-2">
-          <div class="title">
-            <img src="images/line.png" alt="No Image">
-            <span class="title_line">Current Status</span>
-          </div>
-          <div class="row justify-content-md-end mb-1 no-gutters">
-            <div class="col-md-3">
+          <div class="row justify-content-between mb-1 no-gutters">
+            <div class="col-2">
+              <button mat-icon-button aria-label="open close" (click)="sidenav.toggle()">
+                <fa-icon *ngIf="sidenav.opened" [icon]= "faCloseIcon"></fa-icon>
+                <fa-icon *ngIf="!sidenav.opened" [icon]= "barsIcon"></fa-icon>
+              </button>
+            </div>
+            <div class="col-8 col-sm-4 m-2">
               <select class="custom-select custom-select-sm" [(ngModel)]= "selectedAgent"  data-style="btn-new"
                 (ngModelChange) = "selectTheAgent(selectedAgent)">
                 <option *ngFor="let agent of agentList" [value]="agent">{{agent}}</option>
@@ -28,18 +33,23 @@
           <div id="div1" class="kbits-section">
             <span>{{title}}</span>
             <span>
-              <span class="glyphicon" [ngClass]="{'bg-light-green': statusDetails.status == 'green',
+              <span *ngIf="!fetchingData" class="glyphicon" [ngClass]="{'bg-light-green': statusDetails.status == 'green',
               'bg-pink-red': statusDetails.status == 'red', 'bg-orange': statusDetails.status == 'amber'}">
                   <fa-icon *ngIf="statusDetails.status == 'green' || statusDetails.status == 'amber'" [icon]="up" size="1x"></fa-icon>
                   <fa-icon *ngIf="statusDetails.status == 'red'" [icon]="down" size="1x"></fa-icon>
               </span>
+              <span *ngIf="fetchingData" class="glyphicon">
+                <div class="spinner-grow bg-dark" role="status" >
+                  <span class="sr-only">Loading...</span>
+                </div>
+              </span>
             </span>
-            <p style="margin-bottom:0">Since 64 hrs 16 mins (06-05-2019 09:21:59)</p>
+            <p class="mb-0 text-truncate">{{target}}</p>
     
             <div class="title" style="margin-bottom:10px;">
               <img src="images/line.png" alt="No Image">
             </div>
-            <div class="row">
+            <div class="row" *ngIf="!fetchingData">
               <div class="col">
                 <app-chart [chartDatas] = "statusDetails"></app-chart>
               </div>
@@ -53,7 +63,7 @@
           </div>
         </div> -->
     
-        <div class="latest-events">
+        <div class="latest-events" *ngIf="!fetchingData">
           <p *ngIf="errorList" class="latest-title text-center">Latest Events<span pull="right"> (Total: {{errorList.length}})</span></p>
           <ul *ngIf=" errorList && errorList.length == 0" class="news-demo-down-auto" style="overflow-y: hidden; height: 80px;">
             <li style="" class="news-item">No Event found</li>
@@ -67,7 +77,7 @@
         </div>
       </div>
     </div>
-    <div *ngIf="fetchingData" class="row justify-content-center" style="height:100%">
+    <div *ngIf="fetchingData" class="row justify-content-center" style="min-height:75vh">
       <div class="col align-self-center">
         <app-spinner></app-spinner>
       </div>
