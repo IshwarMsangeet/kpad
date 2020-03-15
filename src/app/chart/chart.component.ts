@@ -10,22 +10,35 @@ export class ChartComponent implements OnInit {
 
   constructor() { }
   @Input() chartDatas: any;
+  xData: string[];
 
   ngOnInit() {
-    let prapredData = this.prepareData(this.chartDatas);
-    prapredData && this.draTheChart(prapredData);
+    if (this.chartDatas && this.chartDatas.siteData) {
+      let prapredData = this.prepareData(this.chartDatas);
+      prapredData && this.draTheChart(prapredData);
+    } else {
+      let ref = document.getElementById('container');
+      ref.innerHTML = "No data found to draw the chart";
+      ref.style.color = 'red';
+      ref.style.fontSize = '1.8rem';
+    }
+
   }
 
-  private prepareData(rawData: any) {
-    console.log("rawData ==>>", rawData);
-    let datasets = rawData.datapoints;
 
-    let firstAvailDatasets = {
+  private prepareData(chartDatas: any) {
+    console.log("rawData ==>>", chartDatas);
+    let datasets = chartDatas.siteData.datapoints;
+    let systemData = chartDatas.systemData;
+    let hostDataList: any[] = [];
+    this.xData = datasets.availability_last24hrs.values
+      .map((val: string[]) => val[0])
+    let AvailabilityObj = {
       name: "Availability",
       type: 'spline',
-      data: datasets.availability_last7days.values.map(
+      data: datasets.availability_last24hrs.values.map(
         // (val:string[]) => [val[0], parseFloat(val[1])] )
-        (val:string[]) => parseFloat(val[1]) ),
+        (val: string[]) => parseFloat(val[1])),
       color: Highcharts.getOptions().colors[0],
       fillOpacity: 0.3,
       tooltip: {
@@ -33,31 +46,64 @@ export class ChartComponent implements OnInit {
       }
     };
 
-    let secondAvailDatasets = {
-      name: "Availability",
-      type: 'spline',
-      data: [10.03, 91.68, 99.29, 89.21, 98.6, 98.22, 97.47, 97.5, 97.85, 68.93, 100, 90],
-      color: Highcharts.getOptions().colors[0],
-      fillOpacity: 0.3,
-      tooltip: {
-        valueSuffix: ' ' + '%'
-      }
-    };
-
-    let firstRespDatasets = {
-      name: "Average response time",
+    let responseTimeObj = {
+      name: "responsetime",
       unit: "Second(s)",
       type: 'spline',
-      data: datasets.avg_responsetime_last7days.values.map(
+      data: datasets.avg_responsetime_last24hrs.values.map(
         // (val:string[]) => [val[0], parseFloat(val[1])] )
-        (val:string[]) => parseFloat(val[1]) ),
+        (val: string[]) => parseFloat(val[1])),
       color: Highcharts.getOptions().colors[1],
       fillOpacity: 0.3,
       tooltip: {
         valueSuffix: ' ' + 'Sec(s)'
-      }
+      },
+      yAxis: 1
     };
-    return [[firstAvailDatasets, secondAvailDatasets], [firstRespDatasets]];
+
+
+    if (systemData && Object.keys(systemData).length > 0) {
+      hostDataList = this.prapareForSystemMetrics(systemData);
+      console.log("hostDataList=>", hostDataList);
+      hostDataList.forEach(hostData => {
+        hostData.push(responseTimeObj);
+        hostData.push(AvailabilityObj);
+      })
+    } else {
+      hostDataList.push([responseTimeObj, AvailabilityObj]);
+    }
+    return hostDataList;
+  }
+
+  private prapareForSystemMetrics(systemData): any[] {
+    let hostList = Object.keys(systemData);
+    let colorCount: number = 4;
+    let hostDataList: any[] = [];
+    hostList.forEach((host, i) => {
+      console.log("systemData.host => ", systemData[host]);
+      let subHosts = Object.keys(systemData[host]);
+      if (subHosts && subHosts.length > 0) {
+        let subDataList: any[] = [];
+        subHosts.forEach((k, j) => {
+          console.log("preparing systeme Metric chart Data => ", k);
+          let arr = systemData[host][k];
+          let nArr = arr.map(val => val[1]);
+          let generate = {
+            name: k,
+            type: 'spline',
+            data: nArr,
+            color: Highcharts.getOptions().colors[colorCount++],
+            fillOpacity: 0.3,
+            tooltip: {
+              valueSuffix: ' ' + '%'
+            }
+          }
+          subDataList.push(generate);
+        })
+        hostDataList.push(subDataList);
+      }
+    })
+    return hostDataList;
   }
 
   private draTheChart(datasets: any) {
@@ -81,29 +127,33 @@ export class ChartComponent implements OnInit {
       }
     }
 
-    datasets.forEach(function (dataset: any, i: string) {
+    datasets.forEach((dataset: any, i: string) => {
       let chartDiv = document.createElement('div');
       chartDiv.className = 'chart';
       document.getElementById('container').appendChild(chartDiv);
 
       Highcharts.chart(chartDiv, {
-        plotOptions:{
+        plotOptions: {
           areaspline: {
-            allAreas:false
+            allAreas: false
           },
-          
+
         },
         chart: {
-          marginLeft: 40, // Keep all charts left aligned
-          spacingTop: 20,
-          spacingBottom: 20,
-          height:'250px'
+          // marginLeft: 50, // Keep all charts left aligned
+          // spacingTop: 20,
+          // spacingBottom: 20,
+          // height:'250px'
         },
         title: {
-          text: dataset[0].name,
-          align: 'left',
-          margin: 0,
-          x: 30
+          text: `Host: ${i+1}` ,
+          // align: 'left',
+          // margin: 0,
+          // x: 30,
+
+        },
+        subtitle: {
+          text: 'Co- relation between given values'
         },
         credits: {
           enabled: false
@@ -115,26 +165,40 @@ export class ChartComponent implements OnInit {
           crosshair: {
             dashStyle: 'Solid',
           },
-          type:'category',
+          type: 'category',
           events: {
             setExtremes: syncExtremes
           },
           labels: {
             format: '{value}'
           },
-          categories:["4th Mar", "5th Mar","6th Mar","7th Mar",
-          "8th Mar","9th Mar", "10th Mar", "11th Mar", "12th Mar", "13th Mar", "14th Mar"]
+          categories: this.xData
         },
-        yAxis: {
+        yAxis: [{
           title: {
-            text: null 
+            text: "Percentage"
+          },
+          labels: {
+            format: '{value}%'
+          }
         },
-        labels: {
-          format: '{value}'
-      }
-        },
+        { // Secondary yAxis
+          title: {
+            text: 'Responsetime',
+            style: {
+              color: Highcharts.getOptions().colors[4]
+            }
+          },
+          labels: {
+            format: '{value}Sec(s)',
+            style: {
+              color: Highcharts.getOptions().colors[4]
+            }
+          },
+          opposite: true
+        }],
         tooltip: {
-          positioner: function () {
+          /* positioner: function () {
             return {
               // right aligned
               x: this.chart.chartWidth - this.label.width,
@@ -148,8 +212,8 @@ export class ChartComponent implements OnInit {
           shadow: false,
           style: {
             fontSize: '15px'
-          },
-          // valueDecimals: dataset.valueDecimals
+          }, */
+          shared: true
         },
         series: dataset
       });

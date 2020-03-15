@@ -1,7 +1,7 @@
 
 
 <mat-sidenav-container class="example-container" 
-  hasBackdrop="false" style="height: 100%">
+  hasBackdrop="false">
   <mat-sidenav #sidenav mode="side" opened>
     <mat-nav-list role="navigation">
       <a mat-list-item [routerLink]="['/status-details']"
@@ -17,7 +17,7 @@
         <div class="current-status-section mb-2">
           <div class="row justify-content-between mb-1 no-gutters">
             <div class="col-2">
-              <button mat-icon-button aria-label="open close" (click)="sidenav.toggle()">
+              <button class="d-block d-sm-none" mat-icon-button aria-label="open close" (click)="sidenav.toggle()">
                 <fa-icon *ngIf="sidenav.opened" [icon]= "faCloseIcon"></fa-icon>
                 <fa-icon *ngIf="!sidenav.opened" [icon]= "barsIcon"></fa-icon>
               </button>
@@ -49,9 +49,9 @@
             <div class="title" style="margin-bottom:10px;">
               <img src="images/line.png" alt="No Image">
             </div>
-            <div class="row" *ngIf="!fetchingData">
+            <div class="row no-gutters" *ngIf="!fetchingData">
               <div class="col">
-                <app-chart [chartDatas] = "statusDetails"></app-chart>
+                <app-chart [chartDatas] = "chartDataObj"></app-chart>
               </div>
             </div>
           </div>

@@ -31,6 +31,7 @@ export class StatusDetailComponent implements OnInit {
   fetchingData:boolean= false;
   title:string ='...';
   siteList: any[];
+  chartDataObj = {};
   @ViewChild(LinechartTimelineComponent)
   private linechart: LinechartTimelineComponent
 
@@ -53,16 +54,21 @@ export class StatusDetailComponent implements OnInit {
 
   private getStatusDetail() {
     this.fetchingData = true;
-
     this.statusRetService.getStatusDetail(this.target, this.targetType).subscribe(
       res => {
         console.log("forkJon Res =>", res);
         this.statusDetails = res[0].data[0];
-        this.backupStatusDetails = this.statusDetails;
-        this.agentList = this.statusDetails.agent_list;
-        this.title = this.statusDetails.title;
-        this.agentList.unshift('SPG-ALL-AGENT');
-        this.errorList = this.statusDetails.metrics.errorlist_last24hrs;
+        if(this.statusDetails){
+          this.backupStatusDetails = this.statusDetails;
+          this.agentList = this.statusDetails.agent_list;
+          this.title = this.statusDetails.title;
+          this.agentList.unshift('SPG-ALL-AGENT');
+          this.errorList = this.statusDetails.metrics.errorlist_last24hrs;
+          this.chartDataObj = {
+            siteData: this.statusDetails,
+            systemData: res[1].data
+          }
+        }
         this.fetchingData = false;
       },
       error => {
@@ -92,8 +98,8 @@ export class StatusDetailComponent implements OnInit {
     }
 
     if(isAgentChanged){
-      setTimeout(()=>{
-        this.plotTheChart('availability_last24hrs','errorlist_last24hrs','Availability');
+      setTimeout(()=>{//need to correct it
+        //this.plotTheChart('availability_last24hrs','errorlist_last24hrs','Availability');
       }, 100)
     }
   }
