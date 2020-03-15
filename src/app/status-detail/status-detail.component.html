@@ -1,112 +1,76 @@
-<div *ngIf="!fetchingData" class="row justify-content-center no-gutters">
-  <div class="col m-2">
-    <div class="current-status-section mb-2">
-      <div class="title">
-        <img src="images/line.png" alt="No Image">
-        <span class="title_line">Current Status</span>
-      </div>
-      <div class="row justify-content-md-end mb-1 no-gutters">
-        <div class="col-md-3">
-          <select class="custom-select custom-select-sm" [(ngModel)]= "selectedAgent"  data-style="btn-new"
-            (ngModelChange) = "selectTheAgent(selectedAgent)">
-            <option *ngFor="let agent of agentList" [value]="agent">{{agent}}</option>
-          </select>
-        </div>
-      </div>
 
-      <div id="div1" class="kbits-section">
-        <span>{{title}}</span>
-        <span>
-          <span class="glyphicon" [ngClass]="{'bg-light-green': statusDetails.status == 'green',
-          'bg-pink-red': statusDetails.status == 'red', 'bg-orange': statusDetails.status == 'amber'}">
-              <fa-icon *ngIf="statusDetails.status == 'green' || statusDetails.status == 'amber'" [icon]="up" size="1x"></fa-icon>
-              <fa-icon *ngIf="statusDetails.status == 'red'" [icon]="down" size="1x"></fa-icon>
-          </span>
-        </span>
-        <p style="margin-bottom:0">Since 64 hrs 16 mins (06-05-2019 09:21:59)</p>
 
-        <div class="title" style="margin-bottom:10px;">
-          <img src="images/line.png" alt="No Image">
-        </div>
-        <div class="row justify-content-center p-1">Availability</div>
-        <div class="row" style="margin:0;border-bottom: 1px solid #bbb;">
-          <div class="col-md-4">
-            <div class="on-cursor" [ngClass]= "{'show-shadow': selectedGraph == 'availability_last24hrs'}"
-              (click) = "plotTheChart('availability_last24hrs', 'errorlist_last24hrs', 'Availability')">
-              <strong>{{ statusDetails.metrics ? statusDetails.metrics.availability_last24hrs : '- -'}}%</strong>
-              <p>Last 24 hours</p>
+<mat-sidenav-container class="example-container" 
+  hasBackdrop="false">
+  <mat-sidenav #sidenav mode="side" opened>
+    <mat-nav-list role="navigation">
+      <a mat-list-item [routerLink]="['/status-details']" [queryParams]="{ target: site.target, target_type: site.target_type }"  *ngFor=" let site of siteList" routerLinkActive="active-link">{{site.title}}</a>
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <button mat-button (click)="sidenav.toggle()">toggle</button>
+    <div class="row justify-content-center no-gutters" *ngIf="!fetchingData">
+      <div class="col m-2">
+        <div class="current-status-section mb-2">
+          <div class="title">
+            <img src="images/line.png" alt="No Image">
+            <span class="title_line">Current Status</span>
+          </div>
+          <div class="row justify-content-md-end mb-1 no-gutters">
+            <div class="col-md-3">
+              <select class="custom-select custom-select-sm" [(ngModel)]= "selectedAgent"  data-style="btn-new"
+                (ngModelChange) = "selectTheAgent(selectedAgent)">
+                <option *ngFor="let agent of agentList" [value]="agent">{{agent}}</option>
+              </select>
             </div>
           </div>
-
-          <div class="col-md-4">
-            <div class="on-cursor" [ngClass]= "{'show-shadow': selectedGraph == 'availability_last7days'}"
-              (click) = "plotTheChart('availability_last7days', 'errorlist_last7days', 'Availability')">
-              <strong>{{ statusDetails.metrics ? statusDetails.metrics.availability_last7days : '- -'}}%</strong>
-              <p>Last 7 days</p>
+    
+          <div id="div1" class="kbits-section">
+            <span>{{title}}</span>
+            <span>
+              <span class="glyphicon" [ngClass]="{'bg-light-green': statusDetails.status == 'green',
+              'bg-pink-red': statusDetails.status == 'red', 'bg-orange': statusDetails.status == 'amber'}">
+                  <fa-icon *ngIf="statusDetails.status == 'green' || statusDetails.status == 'amber'" [icon]="up" size="1x"></fa-icon>
+                  <fa-icon *ngIf="statusDetails.status == 'red'" [icon]="down" size="1x"></fa-icon>
+              </span>
+            </span>
+            <p style="margin-bottom:0">Since 64 hrs 16 mins (06-05-2019 09:21:59)</p>
+    
+            <div class="title" style="margin-bottom:10px;">
+              <img src="images/line.png" alt="No Image">
             </div>
-          </div>
-
-          <div class="col-md-4">
-            <div class="on-cursor" [ngClass]= "{'show-shadow': selectedGraph == 'availability_last30days'}"
-              (click) = "plotTheChart('availability_last30days', 'errorlist_last30days', 'Availability')">
-              <strong>{{ statusDetails.metrics ? statusDetails.metrics.availability_last30days: '- -'}}%</strong>
-              <p>Last 30 days</p>
+            <div class="row">
+              <div class="col">
+                <app-chart [chartDatas] = "statusDetails"></app-chart>
+              </div>
             </div>
           </div>
         </div>
-
-        <div class="row justify-content-center p-1 mt-1">Average response time</div>
-        <div class="row" style="margin:0;">
-          <div class="col-md-4">
-            <div class="on-cursor" [ngClass]= "{'show-shadow': selectedGraph == 'avg_responsetime_last24hrs'}"
-              (click) = "plotTheChart('avg_responsetime_last24hrs', 'errorlist_last24hrs', 'Average response time')">
-              <strong>{{ statusDetails.metrics ? statusDetails.metrics.avg_responsetime_last24hrs : '- -'}} Second(s)</strong>
-              <p>Last 24 hours</p>
-            </div>
+    
+        <!-- <div class="card mb-1 shadow">
+          <div class="card-body">
+            <app-linechart-timeline *ngIf="statusDetails.datapoints" [graphData] = "statusDetails.datapoints"></app-linechart-timeline>
           </div>
-
-          <div class="col-md-4">
-            <div class="on-cursor" [ngClass]= "{'show-shadow': selectedGraph == 'avg_responsetime_last7days'}"
-              (click) = "plotTheChart('avg_responsetime_last7days', 'errorlist_last7days', 'Average response time')">
-              <strong>{{ statusDetails.metrics ? statusDetails.metrics.avg_responsetime_last7days: '- -'}} Second(s)</strong>
-              <p>Last 7 days</p>
+        </div> -->
+    
+        <div class="latest-events">
+          <p *ngIf="errorList" class="latest-title text-center">Latest Events<span pull="right"> (Total: {{errorList.length}})</span></p>
+          <ul *ngIf=" errorList && errorList.length == 0" class="news-demo-down-auto" style="overflow-y: hidden; height: 80px;">
+            <li style="" class="news-item">No Event found</li>
+          </ul>
+          <ul *ngIf="errorList && errorList.length > 0" class="news-demo-down-auto" style="height: 90px;">
+            <div class="event-scoll">
+              <li class="mr-3" *ngFor= "let error of errorList">{{error}}<fa-icon class="red_arrow" pull="right" [icon]="download" size="1x"></fa-icon>
+              </li>
             </div>
-          </div>
-
-          <div class="col-md-4">
-            <div class="on-cursor" [ngClass]= "{'show-shadow': selectedGraph == 'avg_responsetime_last30days'}"
-              (click) = "plotTheChart('avg_responsetime_last30days', 'errorlist_last30days', 'Average response time')">
-              <strong>{{ statusDetails.metrics ? statusDetails.metrics.avg_responsetime_last30days: '- -'}} Second(s)</strong>
-              <p>Last 30 days</p>
-            </div>
-          </div>
+          </ul>
         </div>
-
       </div>
     </div>
-
-    <div class="card mb-1 shadow">
-      <div class="card-body">
-        <app-linechart-timeline *ngIf="statusDetails.datapoints" [graphData] = "statusDetails.datapoints"></app-linechart-timeline>
+    <div *ngIf="fetchingData" class="row justify-content-center" style="height:100%">
+      <div class="col align-self-center">
+        <app-spinner></app-spinner>
       </div>
     </div>
-
-    <div class="latest-events">
-      <p *ngIf="errorList" class="latest-title text-center">Latest Events<span pull="right"> (Total: {{errorList.length}})</span></p>
-      <ul *ngIf=" errorList && errorList.length == 0" class="news-demo-down-auto" style="overflow-y: hidden; height: 80px;">
-        <li style="" class="news-item">No Event found</li>
-      </ul>
-      <ul *ngIf="errorList && errorList.length > 0" class="news-demo-down-auto" style="height: 90px;">
-        <div class="event-scoll">
-          <li class="mr-3" *ngFor= "let error of errorList">{{error}}<fa-icon class="red_arrow" pull="right" [icon]="download" size="1x"></fa-icon>
-          </li>
-        </div>
-      </ul>
-    </div>
-  </div>
-</div>
-<div *ngIf="fetchingData" class="row justify-content-center" style="height:60%">
-  <div class="col align-self-center">
-    <app-spinner></app-spinner>
-  </div>
-</div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

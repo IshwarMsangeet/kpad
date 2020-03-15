@@ -198,6 +198,11 @@
 .hide_div2 ul li {border-bottom:1px solid #a6a6a6;    padding: 5px 0;}
 .red_arrow{color:#fd4432}
 
+.active-link{
+  background: #673AB7 !important;
+  color: #f1fbe3;
+  font-weight: bold!important;
+}
 
 @media only screen and (max-width: 1024px) {
 	.current-status-section .title_line {

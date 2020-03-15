@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { faArrowUp, faArrowDown, faDownload, faUpload } from '@fortawesome/free-solid-svg-icons';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { StatusRetrieverService } from '../common-services/status-retriever.service';
 import { LinechartTimelineComponent } from '../linechart-timeline/linechart-timeline.component';
@@ -25,20 +25,25 @@ export class StatusDetailComponent implements OnInit {
   errorList: any[];
   fetchingData:boolean= false;
   title:string;
-
+  siteList: any[];
   @ViewChild(LinechartTimelineComponent)
   private linechart: LinechartTimelineComponent
 
 
   constructor(private route: ActivatedRoute,
-    private location: Location,
+    private location: Location, private router: Router,
     private statusRetService: StatusRetrieverService) { }
 
   ngOnInit() {
-    let snapshot = this.route.snapshot;
-    this.target =  snapshot.queryParams.target;
-    this.targetType = snapshot.queryParams.target_type;
-    this.getStatusDetail();
+    this.route.queryParams.
+    subscribe(params =>{
+      console.log("params=> ", params.target);
+      this.target =  params.target;
+      this.targetType = params.target_type;
+      this.getStatusDetail();
+      this.getHostDetails();
+    });
+    this.siteList = this.statusRetService.sitesInfo;
   }
 
   private getStatusDetail() {
@@ -46,7 +51,8 @@ export class StatusDetailComponent implements OnInit {
 
     this.statusRetService.getStatusDetail(this.target, this.targetType).subscribe(
       res => {
-        this.statusDetails = res.data[0];
+        console.log("forkJon Res =>", res);
+        this.statusDetails = res[0].data[0];
         this.backupStatusDetails = this.statusDetails;
         this.agentList = this.statusDetails.agent_list;
         this.title = this.statusDetails.title;
@@ -85,5 +91,14 @@ export class StatusDetailComponent implements OnInit {
         this.plotTheChart('availability_last24hrs','errorlist_last24hrs','Availability');
       }, 100)
     }
+  }
+
+  private getHostDetails() {
+    this.statusRetService.getHostDetails(this.target)
+    .subscribe(res=>{
+      console.log("Host details=>", res);
+    },err=>{
+
+    })
   }
 }

@@ -67,12 +67,18 @@ export class IndividualStatusComponent implements OnInit {
   });
   }
 
-  gotoDetailPage(target, target_type, ev: any) {
-    if(!this.isSelectFunClicked){
-    this.router.navigate(['/status-details'], {queryParams: {'target': target, 'target_type': target_type}});
-  }else{
-    this.isSelectFunClicked = false;
-  }
+  gotoDetailPage(target: string, target_type: string, index: number) {
+    if (!this.isSelectFunClicked) {
+      let siteStatusList: [] = this.siteStatuses.slice();
+      let status = siteStatusList[index];
+      siteStatusList.splice(index, 1);
+      siteStatusList.unshift(status);
+      this.service.sitesInfo = siteStatusList;
+      this.router.navigate(['/status-details'],
+        { queryParams: { 'target': target, 'target_type': target_type } });
+    } else {
+      this.isSelectFunClicked = false;
+    }
   }
 
   selectTheAgent(status: any) {
@@ -83,8 +89,6 @@ export class IndividualStatusComponent implements OnInit {
         this.isLoading = false;
         this.fetchingData = false;
         this.isSelectFunClicked = false;
-        this.status.state =  this.status.state === 'active' ? 'inactive' : 'active';
-        console.log("this.status.state =>", this.status.state );
       },
         error => {
           this.fetchingData = false;

@@ -77,7 +77,7 @@
         </tr>
        </thead>
       <tbody>
-          <tr *ngFor="let status of siteStatuses" (click) = "gotoDetailPage(status.target, status.target_type , $event)">
+          <tr *ngFor="let status of siteStatuses; let i = index" (click) = "gotoDetailPage(status.target, status.target_type, i)">
             <th scope="row" data-toggle="tooltip" data-placement="right" title="{{status.target}}">
               <fa-icon *ngIf="status.status == 'green'" [icon]="up" [styles]="{'stroke': 'green', 'color': 'green'}" pull="left"></fa-icon>
               <fa-icon *ngIf="status.status == 'red'" [icon]="down" [styles]="{'stroke': 'red', 'color': 'red'}" pull="left"></fa-icon>

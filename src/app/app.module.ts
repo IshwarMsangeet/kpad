@@ -23,6 +23,10 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { LoginComponent } from './login/login.component';
 import { AuthService } from './common-services/auth.service';
 import { LoadingComponent } from './loading/loading.component';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatListModule } from '@angular/material/list';
+import { MatButtonModule } from '@angular/material/button';
+import { ChartComponent } from './chart/chart.component';
 
 const appRoutes: Routes = [
   { path: '', component: DashboardComponent,  canActivate: [AuthService] },
@@ -40,12 +44,15 @@ const appRoutes: Routes = [
     ReactiveFormsModule,
     NgxChartsModule,
     BrowserAnimationsModule,
-    FontAwesomeModule
+    FontAwesomeModule,
+    MatSidenavModule,
+    MatListModule,
+    MatButtonModule
   ],
   declarations: [ AppComponent, LinechartTimelineComponent, 
       OverallStatusComponent, IncidentsComponent,
       IndividualStatusComponent, StatusDetailComponent,
-      SpinnerComponent, DashboardComponent, LoginComponent, LoadingComponent ],
+      SpinnerComponent, DashboardComponent, LoginComponent, LoadingComponent, ChartComponent ],
   bootstrap:    [ AppComponent ],
   providers: [IncidentsRetrieverService, StatusRetrieverService, OverallStatusService]
 })
