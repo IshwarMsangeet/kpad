@@ -16,7 +16,11 @@ export class StatusRetrieverService {
   hostDetailUrl = `${environment.BASE_URL}/spgdash/api/target/hosts?target=`;
   systemMetricsDetailUrl = `${environment.BASE_URL}/spgdash/api/target/systemmetrics?target=`
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+    if(localStorage.getItem('sitesInfo')){
+      this.statusInfo = JSON.parse(localStorage.getItem('sitesInfo'));
+    }
+  }
 
   getStatus(): Observable<any> {
     return this.http.get<any>(this.statusInfoUrl);

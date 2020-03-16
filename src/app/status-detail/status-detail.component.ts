@@ -1,10 +1,11 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy, ChangeDetectorRef, AfterViewInit } from '@angular/core';
 import { faArrowUp, faArrowDown, faDownload, faUpload, faBars } from 
         '@fortawesome/free-solid-svg-icons';
 import { faWindowClose } from '@fortawesome/free-regular-svg-icons';
+import { MediaMatcher } from '@angular/cdk/layout';
+import { MatSidenav } from '@angular/material/sidenav';
 
-import { ActivatedRoute, Router } from '@angular/router';
-import { Location } from '@angular/common';
+import { ActivatedRoute } from '@angular/router';
 import { StatusRetrieverService } from '../common-services/status-retriever.service';
 import { LinechartTimelineComponent } from '../linechart-timeline/linechart-timeline.component';
 
@@ -13,7 +14,7 @@ import { LinechartTimelineComponent } from '../linechart-timeline/linechart-time
   templateUrl: './status-detail.component.html',
   styleUrls: ['./status-detail.component.css']
 })
-export class StatusDetailComponent implements OnInit {
+export class StatusDetailComponent implements OnInit, OnDestroy , AfterViewInit {
   up = faArrowUp;
   down = faArrowDown;
   download = faDownload;
@@ -30,15 +31,23 @@ export class StatusDetailComponent implements OnInit {
   errorList: any[];
   fetchingData:boolean= false;
   title:string ='...';
-  siteList: any[];
+  siteList: any[]= [];
   chartDataObj = {};
+  mobileQuery: MediaQueryList;
+  @ViewChild('sidenav') sidenav: MatSidenav;
   @ViewChild(LinechartTimelineComponent)
-  private linechart: LinechartTimelineComponent
+  private linechart: LinechartTimelineComponent;
 
+  private _mobileQueryListener: () => void;
 
   constructor(private route: ActivatedRoute,
-    private location: Location, private router: Router,
-    private statusRetService: StatusRetrieverService) { }
+    private statusRetService: StatusRetrieverService,
+    private changeDetectorRef: ChangeDetectorRef,
+    private media: MediaMatcher) {
+      this.mobileQuery = media.matchMedia('(max-width: 600px)');
+      this._mobileQueryListener = () => changeDetectorRef.detectChanges();
+      this.mobileQuery.addListener(this._mobileQueryListener);
+    }
 
   ngOnInit() {
     this.route.queryParams.
@@ -48,8 +57,21 @@ export class StatusDetailComponent implements OnInit {
       this.targetType = params.target_type;
       this.title = params.title;
       this.getStatusDetail();
+      if(this.mobileQuery.matches){
+        this.sidenav.close();
+      }
     });
-    this.siteList = this.statusRetService.sitesInfo;
+
+    let sitesInfo= localStorage.getItem('sitesInfo');
+    if(this.statusRetService.sitesInfo){
+      this.siteList = this.statusRetService.sitesInfo;
+      localStorage.setItem('sitesInfo', JSON.stringify(this.siteList));
+    } else if(localStorage.getItem('sitesInfo')){
+      this.siteList = this.statusRetService.sitesInfo = JSON.parse(sitesInfo);
+    }
+  }
+
+  ngAfterViewInit(){
   }
 
   private getStatusDetail() {
@@ -102,5 +124,8 @@ export class StatusDetailComponent implements OnInit {
         //this.plotTheChart('availability_last24hrs','errorlist_last24hrs','Availability');
       }, 100)
     }
+  }
+  ngOnDestroy(): void {
+    this.mobileQuery.removeListener(this._mobileQueryListener);
   }
 }

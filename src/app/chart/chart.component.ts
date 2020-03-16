@@ -215,7 +215,39 @@ export class ChartComponent implements OnInit {
           }, */
           shared: true
         },
-        series: dataset
+        series: dataset,
+        responsive: {
+          rules: [{
+              condition: {
+                  maxWidth: 600
+              },
+              chartOptions: {
+                  yAxis: [{
+                    title: {
+                      text: null
+                    },
+                    labels: {
+                      format: '{value}'
+                    }
+                  },
+                  { // Secondary yAxis
+                    title: {
+                      text: null
+                    },
+                    labels: {
+                      format: '{value}'
+                    },
+                    opposite: true
+                  }],
+                  subtitle: {
+                      text: null
+                  },
+                  credits: {
+                      enabled: false
+                  }
+              }
+          }]
+      }
       });
       console.debug("Highcharts " + i + ": ", Highcharts);
     });
