@@ -1,15 +1,15 @@
-
-
 <mat-sidenav-container class="example-container" role="status"
   [hasBackdrop]="mobileQuery.matches">
   <mat-sidenav class="status-detail-sidenav" #sidenav 
     [mode]="mobileQuery.matches ? 'over' : 'side'"
-    opened fixedInViewport="true" fixedTopGap="50">
+    opened fixedInViewport="true"
+    [fixedTopGap]="mobileQuery.matches ? '90' : '50'">
     <mat-nav-list role="navigation">
       <a mat-list-item [routerLink]="['/status-details']"
          [queryParams]="{ target: site.target, target_type: site.target_type, title: site.title }"
          *ngFor=" let site of siteList"
-         routerLinkActive="active-link">{{site.title}}
+         routerLinkActive="active-link"
+         class="title-font">{{site.title}}
       </a>
     </mat-nav-list>
   </mat-sidenav>
@@ -17,13 +17,24 @@
     <div class="row justify-content-center no-gutters">
       <div class="col">
         <div class="current-status-section mb-2">
-          <div class="row justify-content-between mb-1 no-gutters">
-            <div class="col-2">
-              <button class="d-block d-sm-none" mat-icon-button aria-label="open close" (click)="sidenav.toggle()">
+          <div id= "topView" 
+            class="row  justify-content-center justify-content-sm-end mb-1 no-gutters">
+            <div class="col-2 d-block d-sm-none">
+              <button mat-icon-button aria-label="open close" (click)="sidenav.toggle()">
                 <fa-icon [icon]= "barsIcon"></fa-icon>
               </button>
             </div>
-            <div class="col-8 col-sm-4 m-2">
+            <div class="col-10 col-sm-3 m-sm-2 mt-1">
+              <mat-button-toggle-group #timeFilter
+                appearance="legacy"
+                name="timeFilter" aria-label="timeFilter"
+                (change)= onChangeTime($event)>
+                <mat-button-toggle value="_last24hrs" checked>24Hrs</mat-button-toggle>
+                <mat-button-toggle value="_last7days">7Days</mat-button-toggle>
+                <mat-button-toggle value="_last30days">30Days</mat-button-toggle>
+              </mat-button-toggle-group>
+            </div>
+            <div class="col-6 col-sm-4 m-sm-2 m-1">
               <select class="custom-select custom-select-sm" [(ngModel)]= "selectedAgent"  data-style="btn-new"
                 (ngModelChange) = "selectTheAgent(selectedAgent)">
                 <option *ngFor="let agent of agentList" [value]="agent">{{agent}}</option>
@@ -45,24 +56,14 @@
                 </div>
               </span>
             </span>
-            <p class="mb-0 text-truncate">{{target}}</p>
-    
-            <div class="title" style="margin-bottom:10px;">
-              <img src="images/line.png" alt="No Image">
-            </div>
+            <p class="mb-2 text-truncate target-link-size"><a [href] ="target" target="_blank" class="mb-2 text-truncate target-link-size">{{target}}</a></p>
             <div class="row no-gutters" *ngIf="!fetchingData">
               <div class="col">
-                <app-chart [chartDatas] = "chartDataObj"></app-chart>
+                <app-chart [data] = "chartDataObj"></app-chart>
               </div>
             </div>
           </div>
         </div>
-    
-        <!-- <div class="card mb-1 shadow">
-          <div class="card-body">
-            <app-linechart-timeline *ngIf="statusDetails.datapoints" [graphData] = "statusDetails.datapoints"></app-linechart-timeline>
-          </div>
-        </div> -->
     
         <div class="latest-events" *ngIf="!fetchingData">
           <p *ngIf="errorList" class="latest-title text-center">Latest Events<span pull="right"> (Total: {{errorList.length}})</span></p>

@@ -27,17 +27,16 @@
 	background: #f1fbe3;
 	text-align: center;
 	padding: 10px;
-	text-shadow: 1px 1px #e5e5e5;
 }
 
 .kbits-section .glyphicon {
-    padding-top: 4px;
+    padding-top: 0px;
     border-radius: 3px;
     display: block;
     margin: 0 auto;
     color: #fff;
-    width: 40px;
-    height: 40px;
+    width: 35px;
+    height: 35px;
     font-size: 25px;
     text-align: center;
     /* padding-right: 3px; */
@@ -205,6 +204,14 @@
 
 .status-detail-sidenav{
 	box-shadow: 6px 0 6px rgba(0,0,0,.1);
+}
+
+.title-font{
+	color: #333333cc;
+}
+
+.target-link-size{
+	font-size: .8rem;
 }
 
 @media only screen and (max-width: 1024px) {

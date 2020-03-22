@@ -1,46 +1,59 @@
-import { Component, OnInit, Input } from '@angular/core';
+import {
+  Component, OnInit, Input, OnDestroy
+} from '@angular/core';
 import * as Highcharts from 'highcharts';
+import { Observable, Subscribable, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-chart',
   templateUrl: './chart.component.html',
   styleUrls: ['./chart.component.css']
 })
-export class ChartComponent implements OnInit {
+export class ChartComponent implements OnInit, OnDestroy {
 
   constructor() { }
-  @Input() chartDatas: any;
+  @Input() data: Observable<any>;
+  dataSubs: Subscription;
   xData: string[];
-
+  hostNameList: string[]=[];
+  colors: string[] = ['#b300b3', '#569651', '#006600', '#0000e6',
+      '#666600', '#339933', '#666699', '#3973ac', '#006658', '#ff5500',
+      '#001a00', '#4d2600', '#c7c617', '#ff66b3', '#dedbdb'];
   ngOnInit() {
-    if (this.chartDatas && this.chartDatas.siteData) {
-      let prapredData = this.prepareData(this.chartDatas);
-      prapredData && this.draTheChart(prapredData);
-    } else {
-      let ref = document.getElementById('container');
-      ref.innerHTML = "No data found to draw the chart";
-      ref.style.color = 'red';
-      ref.style.fontSize = '1.8rem';
-    }
+    console.log("Chat component called")
+    this.dataSubs = this.data.subscribe(data => {
+      this.hostNameList = [''];
+      if (data && data.siteData) {
+        let prapredData = this.prepareData(data);
+        prapredData && this.draTheChart(prapredData);
+      } else {
+        let ref = document.getElementById('container');
+        ref.innerHTML = "No data found to draw the chart";
+        ref.style.color = 'red';
+        ref.style.fontSize = '1.8rem';
+      }
+    })
+  }
 
+  ngOnDestroy(){
+    this.dataSubs.unsubscribe();
   }
 
 
   private prepareData(chartDatas: any) {
     console.log("rawData ==>>", chartDatas);
-    let datasets = chartDatas.siteData.datapoints;
+    let datasets = chartDatas.siteData;
     let systemData = chartDatas.systemData;
     let hostDataList: any[] = [];
-    this.xData = datasets.availability_last24hrs.values
-      .map((val: string[]) => val[0])
+    // this.xData = datasets.availability_last24hrs.values
+    //   .map((val: string[]) => val[0])
     let AvailabilityObj = {
       name: "Availability",
       type: 'spline',
-      data: datasets.availability_last24hrs.values.map(
-        // (val:string[]) => [val[0], parseFloat(val[1])] )
-        (val: string[]) => parseFloat(val[1])),
-      color: Highcharts.getOptions().colors[0],
-      fillOpacity: 0.3,
+      data: datasets.availabilityList.map(
+        (val: string[]) => [val[0], parseFloat(val[1])]),
+      color: this.colors[1],
+      fillOpacity: .9,
       tooltip: {
         valueSuffix: ' ' + '%'
       }
@@ -50,11 +63,10 @@ export class ChartComponent implements OnInit {
       name: "responsetime",
       unit: "Second(s)",
       type: 'spline',
-      data: datasets.avg_responsetime_last24hrs.values.map(
-        // (val:string[]) => [val[0], parseFloat(val[1])] )
-        (val: string[]) => parseFloat(val[1])),
-      color: Highcharts.getOptions().colors[1],
-      fillOpacity: 0.3,
+      data: datasets.responsetimeList.map(
+        (val: string[]) => [val[0], parseFloat(val[1])]),
+      color: this.colors[0],
+      fillOpacity: 0.9,
       tooltip: {
         valueSuffix: ' ' + 'Sec(s)'
       },
@@ -63,6 +75,7 @@ export class ChartComponent implements OnInit {
 
 
     if (systemData && Object.keys(systemData).length > 0) {
+      this.hostNameList = Object.keys(systemData);
       hostDataList = this.prapareForSystemMetrics(systemData);
       console.log("hostDataList=>", hostDataList);
       hostDataList.forEach(hostData => {
@@ -77,27 +90,28 @@ export class ChartComponent implements OnInit {
 
   private prapareForSystemMetrics(systemData): any[] {
     let hostList = Object.keys(systemData);
-    let colorCount: number = 4;
     let hostDataList: any[] = [];
     hostList.forEach((host, i) => {
-      console.log("systemData.host => ", systemData[host]);
+      let colorCount: number = 2;
+      // console.log("systemData.host => ", systemData[host]);
       let subHosts = Object.keys(systemData[host]);
       if (subHosts && subHosts.length > 0) {
         let subDataList: any[] = [];
         subHosts.forEach((k, j) => {
-          console.log("preparing systeme Metric chart Data => ", k);
           let arr = systemData[host][k];
-          let nArr = arr.map(val => val[1]);
+          let nArr: [] = arr.map(val =>[val[0], val[1]]);
+
           let generate = {
             name: k,
             type: 'spline',
             data: nArr,
-            color: Highcharts.getOptions().colors[colorCount++],
-            fillOpacity: 0.3,
+            color: this.colors[colorCount++],
+            fillOpacity: .9,
             tooltip: {
               valueSuffix: ' ' + '%'
             }
           }
+          console.log("nArr ===---->", nArr);
           subDataList.push(generate);
         })
         hostDataList.push(subDataList);
@@ -107,53 +121,53 @@ export class ChartComponent implements OnInit {
   }
 
   private draTheChart(datasets: any) {
-    function syncExtremes(e) {
-      var thisChart = this.chart;
-
-      if (e.trigger !== 'syncExtremes') { // Prevent feedback loop
-        Highcharts.each(Highcharts.charts, function (chart) {
-          if (chart !== thisChart) {
-            if (chart.xAxis[0].setExtremes) { // It is null while updating
-              chart.xAxis[0].setExtremes(
-                e.min,
-                e.max,
-                undefined,
-                false,
-                { trigger: 'syncExtremes' }
-              );
-            }
-          }
-        });
-      }
+    let existId = document.getElementById('container');
+    if(existId) {
+      existId.innerHTML = '';
     }
-
     datasets.forEach((dataset: any, i: string) => {
       let chartDiv = document.createElement('div');
       chartDiv.className = 'chart';
       document.getElementById('container').appendChild(chartDiv);
-
+      
       Highcharts.chart(chartDiv, {
         plotOptions: {
+          series: {
+            marker: {
+              enabled: true,
+              radius: 2,
+            },
+            lineWidth: 1,
+            states: {
+              hover: {
+                lineWidth: 1.5
+              }
+            }
+          },
           areaspline: {
             allAreas: false
           },
-
         },
         chart: {
           // marginLeft: 50, // Keep all charts left aligned
           // spacingTop: 20,
-          // spacingBottom: 20,
+          spacingBottom: 10,
           // height:'250px'
+          borderColor: '#547d05',
+          borderWidth: 1.2,
         },
         title: {
-          text: `Host: ${i+1}` ,
+          text: this.hostNameList[i],
+          style: {
+            color: '#0835a9',
+          }
           // align: 'left',
           // margin: 0,
           // x: 30,
 
         },
         subtitle: {
-          text: 'Co- relation between given values'
+          text: null
         },
         credits: {
           enabled: false
@@ -166,13 +180,11 @@ export class ChartComponent implements OnInit {
             dashStyle: 'Solid',
           },
           type: 'category',
-          events: {
-            setExtremes: syncExtremes
-          },
+
           labels: {
             format: '{value}'
           },
-          categories: this.xData
+          // categories: this.xData
         },
         yAxis: [{
           title: {
@@ -180,20 +192,22 @@ export class ChartComponent implements OnInit {
           },
           labels: {
             format: '{value}%'
-          }
+          },
+          max: 100,
+          alignTicks: false,
         },
         { // Secondary yAxis
           title: {
             text: 'Responsetime',
-            style: {
-              color: Highcharts.getOptions().colors[4]
-            }
+            // style: {
+            //   color: Highcharts.getOptions().colors[0]
+            // }
           },
           labels: {
             format: '{value}Sec(s)',
-            style: {
-              color: Highcharts.getOptions().colors[4]
-            }
+            // style: {
+            //   color: Highcharts.getOptions().colors[0]
+            // }
           },
           opposite: true
         }],
@@ -218,36 +232,36 @@ export class ChartComponent implements OnInit {
         series: dataset,
         responsive: {
           rules: [{
-              condition: {
-                  maxWidth: 600
+            condition: {
+              maxWidth: 600
+            },
+            chartOptions: {
+              yAxis: [{
+                title: {
+                  text: null
+                },
+                labels: {
+                  format: '{value}'
+                }
               },
-              chartOptions: {
-                  yAxis: [{
-                    title: {
-                      text: null
-                    },
-                    labels: {
-                      format: '{value}'
-                    }
-                  },
-                  { // Secondary yAxis
-                    title: {
-                      text: null
-                    },
-                    labels: {
-                      format: '{value}'
-                    },
-                    opposite: true
-                  }],
-                  subtitle: {
-                      text: null
-                  },
-                  credits: {
-                      enabled: false
-                  }
+              { // Secondary yAxis
+                title: {
+                  text: null
+                },
+                labels: {
+                  format: '{value}'
+                },
+                opposite: true
+              }],
+              subtitle: {
+                text: null
+              },
+              credits: {
+                enabled: false
               }
+            }
           }]
-      }
+        }
       });
       console.debug("Highcharts " + i + ": ", Highcharts);
     });

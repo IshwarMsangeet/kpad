@@ -14,7 +14,7 @@ export class StatusRetrieverService {
   statusDetailsUrl = `${environment.BASE_URL}/spgdash/api/target/resultdetails?target=`;
   statusDetailsV2Url = `${environment.BASE_URL}/spgdash/api/target/resultdetailsV2?target=`;
   hostDetailUrl = `${environment.BASE_URL}/spgdash/api/target/hosts?target=`;
-  systemMetricsDetailUrl = `${environment.BASE_URL}/spgdash/api/target/systemmetrics?target=`
+  systemMetricsDetailUrl = `${environment.BASE_URL}/spgdash/api/target/systemmetrics`
 
   constructor(private http: HttpClient) {
     if(localStorage.getItem('sitesInfo')){
@@ -26,9 +26,9 @@ export class StatusRetrieverService {
     return this.http.get<any>(this.statusInfoUrl);
   }
 
-  getStatusDetail(target: string, targetType: string): Observable<any> {
+  getStatusDetail(target: string, targetType: string, daterange:number=1): Observable<any> {
     let finalUrl = this.statusDetailsUrl + target + '&target_type='+ targetType;
-    return forkJoin(this.http.get<any>(finalUrl), this.getSystemMetricsDetail(target));
+    return forkJoin(this.http.get<any>(finalUrl), this.getSystemMetricsDetail(target, daterange));
   }
 
   getStatusDetailV2(val: any): Observable<any> {
@@ -46,7 +46,7 @@ export class StatusRetrieverService {
     return this.http.get<any>(this.hostDetailUrl+url);
   }
 
-  getSystemMetricsDetail(url: string): Observable<any> {
-    return this.http.get<any>(this.systemMetricsDetailUrl+url);
+  getSystemMetricsDetail(url: string, daterange: number): Observable<any> {
+    return this.http.get<any>(`${this.systemMetricsDetailUrl}?target=${url}&daterange=${daterange}`);
   }
 }
