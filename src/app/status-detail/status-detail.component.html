@@ -18,23 +18,25 @@
       <div class="col">
         <div class="current-status-section mb-2">
           <div id= "topView" 
-            class="row  justify-content-center justify-content-sm-end mb-1 no-gutters">
-            <div class="col-2 d-block d-sm-none">
+            class="row  justify-content-center justify-content-md-end mb-1 no-gutters">
+            <div class="col-2 d-block d-md-none">
               <button mat-icon-button aria-label="open close" (click)="sidenav.toggle()">
                 <fa-icon [icon]= "barsIcon"></fa-icon>
               </button>
             </div>
-            <div class="col-10 col-sm-3 m-sm-2 mt-1">
-              <mat-button-toggle-group #timeFilter
-                appearance="legacy"
-                name="timeFilter" aria-label="timeFilter"
-                (change)= onChangeTime($event)>
-                <mat-button-toggle value="_last24hrs" checked>24Hrs</mat-button-toggle>
-                <mat-button-toggle value="_last7days">7Days</mat-button-toggle>
-                <mat-button-toggle value="_last30days">30Days</mat-button-toggle>
-              </mat-button-toggle-group>
+            <div class="col-10 col-md-6 col-xl-3 m-md-2 mt-1">
+              <div class="text-center text-md-right">
+                <mat-button-toggle-group #timeFilter
+                  appearance="legacy"
+                  name="timeFilter" aria-label="timeFilter"
+                  (change)= onChangeTime($event)>
+                  <mat-button-toggle value="_last24hrs" checked>24Hrs</mat-button-toggle>
+                  <mat-button-toggle value="_last7days">7Days</mat-button-toggle>
+                  <mat-button-toggle value="_last30days">30Days</mat-button-toggle>
+                </mat-button-toggle-group>
+              </div>
             </div>
-            <div class="col-6 col-sm-4 m-sm-2 m-1">
+            <div class="col-6 col-md-4 col-xl-3 m-sm-2 m-1">
               <select class="custom-select custom-select-sm" [(ngModel)]= "selectedAgent"  data-style="btn-new"
                 (ngModelChange) = "selectTheAgent(selectedAgent)">
                 <option *ngFor="let agent of agentList" [value]="agent">{{agent}}</option>

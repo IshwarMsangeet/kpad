@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { StatusRetrieverService } from '../common-services/status-retriever.service';
 import { Router } from '@angular/router';
 // import { trigger, state, style, animate, transition } from '@angular/animations';
-import { faArrowCircleUp, faArrowCircleDown, faQuestionCircle,
+import { faArrowCircleUp, faArrowCircleDown, faQuestionCircle, faInfoCircle,
   faGlobe, faLocationArrow, faExclamationTriangle, faLaptop } 
     from '@fortawesome/free-solid-svg-icons';
 import { faClock, faCheckCircle, faUser } from '@fortawesome/free-regular-svg-icons';
@@ -43,6 +43,7 @@ export class IndividualStatusComponent implements OnInit {
   userIcon = faUser;
   checkICon = faCheckCircle;
   laptopIcon = faLaptop;
+  infoIcon = faInfoCircle;
 
   selectAgent: string = 'Overall';
   status: any = {
